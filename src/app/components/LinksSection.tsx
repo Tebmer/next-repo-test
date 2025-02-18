@@ -15,7 +15,7 @@ const LinksSection = () => {
           alt="Huggingface"
           width={20}
           height={20}
-          className="w-5 h-5"
+          className="w-5 h-5 max-w-full h-auto"  // Ensure responsiveness for Huggingface image
         />
         Dataset
         <span className="text-gray-500 text-sm font-mono">load_dataset(&quot;cais/hle&quot;)</span>
@@ -26,7 +26,7 @@ const LinksSection = () => {
           alt="GitHub"
           width={20}
           height={20}
-          className="w-5 h-5"
+          className="w-5 h-5 max-w-full h-auto"  // Ensure responsiveness for GitHub image
         />
         GitHub
       </Link>
