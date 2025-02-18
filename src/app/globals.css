@@ -7,15 +7,26 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 禁用黑夜模式，确保始终使用浅色模式 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;  /* 强制使用白色背景 */
+    --foreground: #171717;  /* 强制使用深色字体 */
+  }
+}
+
+/* 添加响应式布局支持 */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;  /* 在小屏幕上调整字体大小 */
+  }
 }
