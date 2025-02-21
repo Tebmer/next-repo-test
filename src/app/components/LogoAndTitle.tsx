@@ -15,7 +15,7 @@ const LogoAndTitle = () => {
       </div>
 
       {/* Title */}
-      <h1 className="text-4xl font-extrabold mb-6 bg-gradient-to-r from-[#ff5733] to-[#0066ff] bg-clip-text text-transparent">
+      <h1 className="text-4xl font-extrabold mb-6 bg-gradient-to-r from-[#B7B1F2] to-[#A3D1C6] bg-clip-text text-transparent">
         LiveSQLBench
       </h1>
     </div>
