@@ -20,11 +20,8 @@ const LatestNews = () => {
           />
           <span className="text-gray-500 font-bold">[02/11/2025]:</span>
           <div>
-            <Link href="#" className="text-blue-600 hover:text-blue-700">
-              HLE Community Feedback Expansion - Bug Bounty
-            </Link>
             <span className="text-gray-700">
-              . Finalized Original Authors and we are working on later contributors for co-authorship soon
+              LiveSQLBench has been released! It contains two versions: LiveSQLBench-Base and LiveSQLBench-Large. Download it and test your text-to-SQL LLMs or agents in a containmation-free way!
             </span>
           </div>
         </div>
