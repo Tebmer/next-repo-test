@@ -17,7 +17,7 @@ export default function Page() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       {/* Notice Banner */}
-      <NoticeBanner />
+{/*       <NoticeBanner /> */}
 
       {/* Logo and Title */}
       <LogoAndTitle />
