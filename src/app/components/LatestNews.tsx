@@ -13,7 +13,7 @@ const LatestNews = () => {
         <div className="grid" style={{ gridTemplateColumns: "auto auto 1fr", alignItems: "start" }}>
           {/* Logo with adjustable vertical position */}
           <div className="relative" style={{ width: "40px", height: "40px" }}>
-            <div className="absolute" style={{ top: "-5px" }}>
+            <div className="absolute" style={{ top: "-7px" }}>
               <Image
                 src="/live_button.png"
                 alt="livesqlbench"
