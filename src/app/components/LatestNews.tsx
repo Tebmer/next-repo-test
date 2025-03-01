@@ -11,7 +11,7 @@ const LatestNews = () => {
       </div>
       <div className="font-medium">
         <div className="grid" style={{ gridTemplateColumns: "auto auto 1fr", alignItems: "start", columnGap: "0.5rem" }}>
-          <div className="flex items-center justify-center" style={{ paddingTop: "0.15rem" }}>
+          <div className="flex items-center justify-center" style={{ paddingTop: "0.10rem" }}>
             <Image
               src="/live_button.png"
               alt="livesqlbench"
