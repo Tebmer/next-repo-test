@@ -10,8 +10,8 @@ const LatestNews = () => {
         <div className="h-0.5 flex-grow bg-gray-200"></div>
       </div>
       <div className="font-medium">
-        <div className="flex">
-          <div className="flex-shrink-0 w-10 flex items-center self-start mt-1">
+        <div className="flex items-start">
+          <div className="flex-shrink-0 mr-2">
             <Image
               src="/live_button.png"
               alt="livesqlbench"
@@ -20,13 +20,13 @@ const LatestNews = () => {
               className="w-10 h-10"
             />
           </div>
-          <div className="flex-grow ml-2">
-            <div className="flex flex-wrap items-baseline">
-              <span className="text-gray-500 font-bold mr-2">[02/11/2025]:</span>
-              <span className="text-gray-700">
-                LiveSQLBench has been released! It contains two versions: LiveSQLBench-Base and LiveSQLBench-Large. Download it and test your text-to-SQL LLMs or agents in a containmation-free way!
-              </span>
-            </div>
+          <div className="flex-shrink-0 mr-2">
+            <span className="text-gray-500 font-bold">[02/11/2025]:</span>
+          </div>
+          <div>
+            <span className="text-gray-700">
+              LiveSQLBench has been released! It contains two versions: LiveSQLBench-Base and LiveSQLBench-Large. Download it and test your text-to-SQL LLMs or agents in a containmation-free way!
+            </span>
           </div>
         </div>
       </div>
