@@ -4,7 +4,7 @@ const LogoAndTitle = () => {
   return (
     <div className="text-center mb-8">
       {/* Logo */}
-      <div className="w-24 h-24 mx-auto mb-4 relative">
+      <div className="w-48 h-48 mx-auto mb-4 relative">
         <Image
           src="/livesqlbench.png"
           alt="Humanity's Last Exam logo showing a star shape with an arrow"
