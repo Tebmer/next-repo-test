@@ -10,10 +10,10 @@ const LatestNews = () => {
         <div className="h-0.5 flex-grow bg-gray-200"></div>
       </div>
       <div className="font-medium">
-        <div className="flex items-start">
+        <div className="grid" style={{ gridTemplateColumns: "auto auto 1fr", alignItems: "start" }}>
           {/* Logo with adjustable vertical position */}
-          <div className="w-10 h-10 relative mr-2 flex-shrink-0">
-            <div className="absolute" style={{ top: "-7px" }}>
+          <div className="relative" style={{ width: "40px", height: "40px" }}>
+            <div className="absolute" style={{ top: "-5px" }}>
               <Image
                 src="/live_button.png"
                 alt="livesqlbench"
@@ -24,14 +24,16 @@ const LatestNews = () => {
             </div>
           </div>
           
-          {/* Date and Text in same line with adjustable position */}
+          {/* Date with adjustable vertical position */}
+          <div className="relative px-2" style={{ top: "0px" }}>
+            <span className="text-gray-500 font-bold whitespace-nowrap">[02/11/2025]:</span>
+          </div>
+          
+          {/* Text with adjustable vertical position */}
           <div className="relative" style={{ top: "0px" }}>
-            <div className="flex flex-wrap items-baseline">
-              <span className="text-gray-500 font-bold whitespace-nowrap mr-2">[02/11/2025]:</span>
-              <span className="text-gray-700">
-                LiveSQLBench has been released! It contains two versions: LiveSQLBench-Base and LiveSQLBench-Large. Download it and test your text-to-SQL LLMs or agents in a containmation-free way!
-              </span>
-            </div>
+            <span className="text-gray-700">
+              LiveSQLBench has been released! It contains two versions: LiveSQLBench-Base and LiveSQLBench-Large. Download it and test your text-to-SQL LLMs or agents in a containmation-free way!
+            </span>
           </div>
         </div>
       </div>
