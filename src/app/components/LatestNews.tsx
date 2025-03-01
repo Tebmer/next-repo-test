@@ -13,9 +13,9 @@ const LatestNews = () => {
         <div className="flex gap-2">
           <Image
             src="/live_button.png"
-            alt="hle"
-            width={20}
-            height={20}
+            alt="livesqlbench"
+            width={40}
+            height={40}
             className="w-5 h-5"
           />
           <span className="text-gray-500 font-bold">[02/11/2025]:</span>
