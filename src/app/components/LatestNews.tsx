@@ -10,9 +10,9 @@ const LatestNews = () => {
         <div className="h-0.5 flex-grow bg-gray-200"></div>
       </div>
       <div className="font-medium">
-        <div className="flex relative">
-          {/* Logo with absolute positioning for fine-tuning */}
-          <div className="w-10 h-10 relative mr-2">
+        <div className="flex items-start">
+          {/* Logo with adjustable vertical position */}
+          <div className="w-10 h-10 relative mr-2 flex-shrink-0">
             <div className="absolute" style={{ top: "-7px" }}>
               <Image
                 src="/live_button.png"
@@ -24,10 +24,10 @@ const LatestNews = () => {
             </div>
           </div>
           
-          {/* Date and Text content */}
-          <div className="flex-1">
-            <div className="flex flex-wrap">
-              <span className="text-gray-500 font-bold mr-2">[02/11/2025]:</span>
+          {/* Date and Text in same line with adjustable position */}
+          <div className="relative" style={{ top: "0px" }}>
+            <div className="flex flex-wrap items-baseline">
+              <span className="text-gray-500 font-bold whitespace-nowrap mr-2">[02/11/2025]:</span>
               <span className="text-gray-700">
                 LiveSQLBench has been released! It contains two versions: LiveSQLBench-Base and LiveSQLBench-Large. Download it and test your text-to-SQL LLMs or agents in a containmation-free way!
               </span>
