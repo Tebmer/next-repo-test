@@ -4,7 +4,7 @@ const LogoAndTitle = () => {
   return (
     <div className="text-center mb-6">
       {/* Logo */}
-      <div className="w-64 h-64 mx-auto mb-2 relative">
+      <div className="w-128 h-128 mx-auto mb-2 relative">
         <Image
           src="/livesqlbench.png"
           alt="LiveSQLBench logo showing a cloud with SQL text inside"
