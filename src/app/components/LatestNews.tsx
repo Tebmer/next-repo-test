@@ -12,7 +12,7 @@ const LatestNews = () => {
       <div className="font-medium">
         <div className="flex gap-2">
           <Image
-            src="/1.png"
+            src="/live_button.png"
             alt="hle"
             width={20}
             height={20}
