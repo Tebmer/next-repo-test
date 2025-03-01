@@ -6,7 +6,7 @@ const LogoAndTitle = () => {
       {/* Logo */}
       <div className="w-24 h-24 mx-auto mb-4 relative">
         <Image
-          src="/1.png"
+          src="/livesqlbench.png"
           alt="Humanity's Last Exam logo showing a star shape with an arrow"
           fill
           className="object-contain"
