@@ -17,7 +17,7 @@ const LogoAndTitle = () => {
         </div>
         
         {/* Title positioned with negative margin to move it up */}
-        <h1 className="text-5xl font-extrabold -mt-8 bg-gradient-to-r from-[#F95454] to-[#0D92F4] bg-clip-text text-transparent">
+        <h1 className="text-5xl font-extrabold mt-0 bg-gradient-to-r from-[#F95454] to-[#0D92F4] bg-clip-text text-transparent">
           LiveSQLBench
         </h1>
       </div>
