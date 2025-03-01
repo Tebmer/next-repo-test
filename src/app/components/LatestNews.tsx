@@ -13,7 +13,7 @@ const LatestNews = () => {
         <div className="flex relative">
           {/* Logo with absolute positioning for fine-tuning */}
           <div className="w-10 h-10 relative mr-2">
-            <div className="absolute" style={{ top: "-2px" }}>
+            <div className="absolute" style={{ top: "-5px" }}>
               <Image
                 src="/live_button.png"
                 alt="livesqlbench"
