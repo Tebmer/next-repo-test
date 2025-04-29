@@ -1,5 +1,8 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import type { DataEntry, KnowledgeEntry } from '@/utils/fileUtils';
+import SqlViewer from '@/components/SqlViewer';
 import QuantitativeResults from './components/QuantitativeResults';
 import DiscussionSection from './components/DiscussionSection';
 import RelatedArticles from './components/RelatedArticles';
@@ -12,12 +15,13 @@ import LatestNews from './components/LatestNews';
 import PartnerLogos from './components/PartenerLogos';
 import ButtonsAndContent from './components/ButtonsAndContent';
 import Introduction from './components/Introduction';
+import DataViewer from './components/DataViewer';
 
 export default function Page() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       {/* Notice Banner */}
-{/*       <NoticeBanner /> */}
+      {/* <NoticeBanner /> */}
 
       {/* Logo and Title */}
       <LogoAndTitle />
@@ -39,6 +43,9 @@ export default function Page() {
 
       {/* Dataset */}
       <Dataset />
+      
+      {/* Data Viewer */}
+      <DataViewer />
       
       {/* Quantitative Results */}
       <QuantitativeResults />
