@@ -415,6 +415,7 @@ export default function DataViewer() {
                                             {renderSqlSnippet(item.sql_snippet)}
                                           </div>
                                           <p className="mt-1"><span className="font-medium">Type:</span> {item.type}</p>
+                                          <p className="mt-1"><span className="font-medium">Need Masking:</span> {item.is_mask ? "Yes" : "No"}</p>
                                         </div>
                                       ))}
                                     </div>
@@ -433,6 +434,7 @@ export default function DataViewer() {
                                             {renderSqlSnippet(item.sql_snippet)}
                                           </div>
                                           <p className="mt-1"><span className="font-medium">Type:</span> {item.type}</p>
+                                          <p className="mt-1"><span className="font-medium">Need Masking:</span> {item.is_mask ? "Yes" : "No"}</p>
                                         </div>
                                       ))}
                                     </div>
@@ -453,6 +455,7 @@ export default function DataViewer() {
                                         {renderSqlSnippet(item.sql_snippet)}
                                       </div>
                                       <p className="mt-1"><span className="font-medium">Type:</span> {item.type}</p>
+                                      <p className="mt-1"><span className="font-medium">Need Masking:</span> {item.is_mask ? "Yes" : "No"}</p>
                                       <p><span className="font-medium">Deleted Knowledge:</span> {item.deleted_knowledge}</p>
                                     </div>
                                   ))}
