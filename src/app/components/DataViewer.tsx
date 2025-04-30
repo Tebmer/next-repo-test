@@ -288,18 +288,33 @@ export default function DataViewer() {
           <>
             {/* Selected Entry Details - Shown at the top when an entry is selected */}
             {selectedEntry && showDetails && (
-              <div className="flex justify-center w-full overflow-x-auto">
-                <div id="entry-details" className="mb-8 p-6 border rounded-lg bg-gray-50 inline-block" style={{ padding: 0 }}>
-                  <div className="flex flex-col items-center mb-4 w-full">
-                    <h3 className="text-xl font-semibold mb-2">Selected Entry Details</h3>
-                    <button 
-                      onClick={() => setShowDetails(false)}
-                      className="text-sm text-gray-500 hover:text-gray-700 mb-2"
-                    >
-                      Hide Details
-                    </button>
-                  </div>
-                  <div className="flex flex-row gap-8 justify-center px-6 pb-6 pt-0" style={{ minWidth: '1740px' }}>
+            <div className="w-full py-8">               {/* just a normal block */}
+              <div                                        /* the actual card */
+                id="entry-details"
+                className="
+                  mx-auto                                /* <-- centers the card */
+                  max-w-7xl                              /* optional max width */
+                  p-6 mb-8
+                "
+              >
+                <div className="flex flex-col items-center w-full mb-4">
+                  <h3 className="text-xl font-semibold mb-2">Selected Entry Details</h3>
+                  <button
+                    onClick={() => setShowDetails(false)}
+                    className="text-sm text-gray-500 hover:text-gray-700"
+                  >
+                    Hide Details
+                  </button>
+                </div>
+
+                {/* columns */}
+                <div
+                  className="
+                    flex flex-wrap lg:flex-nowrap        /* stack on small screens */
+                    justify-center gap-8
+                    px-6 pb-6
+                  "
+                >
                     {/* Main Query Information */}
                     <div className="flex-shrink-0" style={{ width: '550px' }}>
                       <div className="space-y-4">

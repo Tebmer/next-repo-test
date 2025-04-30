@@ -57,15 +57,17 @@ export interface KnowledgeEntry {
   children_knowledge: number;
 }
 
+// set a new dir for the data
+const dataDir = path.join("/Users/shawnxu/Research/hf_bird_interact/bird-interact");
+
 export function getDatabases(): string[] {
-  const birdInteractPath = path.join(process.cwd(), 'bird-interact');
-  return fs.readdirSync(birdInteractPath)
-    .filter(item => fs.statSync(path.join(birdInteractPath, item)).isDirectory())
+  return fs.readdirSync(dataDir)
+    .filter(item => fs.statSync(path.join(dataDir, item)).isDirectory())
     .filter(dir => dir !== '.git');
 }
 
 export function readDataFile(dbName: string): DataEntry[] {
-  const filePath = path.join(process.cwd(), 'bird-interact', dbName, `${dbName}_data.jsonl`);
+  const filePath = path.join(dataDir, dbName, `${dbName}_data.jsonl`);
   const content = fs.readFileSync(filePath, 'utf-8');
   return content.split('\n')
     .filter(line => line.trim())
@@ -73,7 +75,7 @@ export function readDataFile(dbName: string): DataEntry[] {
 }
 
 export function readKnowledgeFile(dbName: string): KnowledgeEntry[] {
-  const filePath = path.join(process.cwd(), 'bird-interact', dbName, `${dbName}_kb.jsonl`);
+  const filePath = path.join(dataDir, dbName, `${dbName}_kb.jsonl`);
   const content = fs.readFileSync(filePath, 'utf-8');
   return content.split('\n')
     .filter(line => line.trim())
