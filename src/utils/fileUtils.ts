@@ -58,7 +58,7 @@ export interface KnowledgeEntry {
 }
 
 // set a new dir for the data
-const dataDir = path.join("/Users/shawnxu/Research/hf_bird_interact/bird-interact");
+const dataDir = path.join("./bird-interact");
 
 export function getDatabases(): string[] {
   return fs.readdirSync(dataDir)
