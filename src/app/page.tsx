@@ -19,7 +19,7 @@ import DataViewer from './components/DataViewer';
 
 export default function Page() {
   return (
-    <main className="max-w-4xl mx-auto px-4 py-8">
+    <main className="w-full max-w-7xl mx-auto px-4 py-8">
       {/* Notice Banner */}
       {/* <NoticeBanner /> */}
 

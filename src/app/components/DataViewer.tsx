@@ -5,6 +5,7 @@ import type { DataEntry, KnowledgeEntry } from '@/utils/fileUtils';
 import SqlViewer from '@/components/SqlViewer';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Copy, Check } from 'lucide-react';
 
 export default function DataViewer() {
   const [selectedDb, setSelectedDb] = useState<string>('');
@@ -97,10 +98,40 @@ export default function DataViewer() {
     }));
   };
 
-  // Render SQL snippet with syntax highlighting
+  // Add copy button component
+  const CopyButton = ({ content }: { content: string }) => {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = async () => {
+      try {
+        await navigator.clipboard.writeText(content);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy text: ', err);
+      }
+    };
+
+    return (
+      <button
+        onClick={handleCopy}
+        className="absolute top-2 right-2 p-1 rounded-md bg-gray-700 hover:bg-gray-600 transition-colors"
+        title="Copy to clipboard"
+      >
+        {copied ? (
+          <Check className="w-4 h-4 text-green-400" />
+        ) : (
+          <Copy className="w-4 h-4 text-gray-300" />
+        )}
+      </button>
+    );
+  };
+
+  // Modify renderSqlSnippet to include copy button
   const renderSqlSnippet = (sql: string) => {
     return (
-      <div className="rounded-lg overflow-hidden">
+      <div className="relative rounded-lg overflow-hidden">
+        <CopyButton content={sql} />
         <SyntaxHighlighter
           language="sql"
           style={vscDarkPlus}
@@ -117,10 +148,11 @@ export default function DataViewer() {
     );
   };
 
-  // Render Python code with syntax highlighting
+  // Modify renderPythonCode to include copy button
   const renderPythonCode = (code: string) => {
     return (
-      <div className="rounded-lg overflow-hidden">
+      <div className="relative rounded-lg overflow-hidden">
+        <CopyButton content={code} />
         <SyntaxHighlighter
           language="python"
           style={vscDarkPlus}
@@ -133,6 +165,16 @@ export default function DataViewer() {
         >
           {code}
         </SyntaxHighlighter>
+      </div>
+    );
+  };
+
+  // Modify SqlViewer usage to include copy button
+  const SqlViewerWithCopy = ({ sql }: { sql: string }) => {
+    return (
+      <div className="relative">
+        <CopyButton content={sql} />
+        <SqlViewer sql={sql} />
       </div>
     );
   };
@@ -204,12 +246,12 @@ export default function DataViewer() {
   };
 
   return (
-    <section className="my-12">
-      <h2 className="text-2xl font-bold mb-6">Bird Interact Data Viewer</h2>
+    <section className="my-12" style={{ width: '100%', maxWidth: '100%', margin: '0 auto' }}>
+      <h2 className="text-2xl font-bold mb-6 text-center">Bird Interact Data Viewer</h2>
       
       <div className="mb-8">
-        <label className="block text-sm font-medium mb-2">Select Database:</label>
-        <div className="relative">
+        <label className="block text-sm font-medium mb-2 text-center">Select Database:</label>
+        <div className="relative flex justify-center">
           <select
             className="w-full max-w-xs p-3 pl-4 pr-10 border border-gray-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none"
             value={selectedDb}
@@ -246,230 +288,225 @@ export default function DataViewer() {
           <>
             {/* Selected Entry Details - Shown at the top when an entry is selected */}
             {selectedEntry && showDetails && (
-              <div id="entry-details" className="mb-8 p-6 border rounded-lg bg-gray-50">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-semibold">Selected Entry Details</h3>
-                  <button 
-                    onClick={() => setShowDetails(false)}
-                    className="text-sm text-gray-500 hover:text-gray-700"
-                  >
-                    Hide Details
-                  </button>
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-4 border rounded-lg bg-white">
-                      <h4 className="font-medium mb-2">Basic Information</h4>
-                      <p><span className="font-medium">Instance ID:</span> {selectedEntry.instance_id}</p>
-                      <p><span className="font-medium">Database:</span> {selectedEntry.selected_database}</p>
-                      <p><span className="font-medium">Category:</span> {selectedEntry.category}</p>
-                      <p><span className="font-medium">High Level:</span> {selectedEntry.high_level ? 'Yes' : 'No'}</p>
+              <div className="flex justify-center w-full overflow-x-auto">
+                <div id="entry-details" className="mb-8 p-6 border rounded-lg bg-gray-50 inline-block" style={{ padding: 0 }}>
+                  <div className="flex flex-col items-center mb-4 w-full">
+                    <h3 className="text-xl font-semibold mb-2">Selected Entry Details</h3>
+                    <button 
+                      onClick={() => setShowDetails(false)}
+                      className="text-sm text-gray-500 hover:text-gray-700 mb-2"
+                    >
+                      Hide Details
+                    </button>
+                  </div>
+                  <div className="flex flex-row gap-8 justify-center px-6 pb-6 pt-0" style={{ minWidth: '1740px' }}>
+                    {/* Main Query Information */}
+                    <div className="flex-shrink-0" style={{ width: '550px' }}>
+                      <div className="space-y-4">
+                        {renderCollapsibleSection(
+                          'mainQuery',
+                          'Main Query Information',
+                          <div className="space-y-4">
+                            <div className="p-3 border rounded bg-gray-50">
+                              <h5 className="font-medium mb-2">Query</h5>
+                              <p className="text-gray-700">{selectedEntry.query}</p>
+                            </div>
+
+                            {selectedEntry.sol_sql.length > 0 && (
+                              <div className="p-3 border rounded bg-gray-50">
+                                <h5 className="font-medium mb-2">Solution SQL</h5>
+                                <SqlViewerWithCopy sql={selectedEntry.sol_sql.join('\n')} />
+                              </div>
+                            )}
+
+                            {selectedEntry.preprocess_sql.length > 0 && (
+                              <div className="p-3 border rounded bg-gray-50">
+                                <h5 className="font-medium mb-2">Preprocess SQL</h5>
+                                <SqlViewerWithCopy sql={selectedEntry.preprocess_sql.join('\n')} />
+                              </div>
+                            )}
+
+                            {selectedEntry.clean_up_sqls.length > 0 && (
+                              <div className="p-3 border rounded bg-gray-50">
+                                <h5 className="font-medium mb-2">Clean Up SQL</h5>
+                                <SqlViewerWithCopy sql={selectedEntry.clean_up_sqls.join('\n')} />
+                              </div>
+                            )}
+
+                            {selectedEntry.external_knowledge.length > 0 && (
+                              <div className="p-3 border rounded bg-gray-50">
+                                <h5 className="font-medium mb-2">External Knowledge</h5>
+                                <div className="space-y-2">
+                                  {selectedEntry.external_knowledge.map((id) => {
+                                    const knowledgeEntry = getKnowledgeById(id);
+                                    return (
+                                      <div key={id} className="p-2 border rounded bg-white">
+                                        <div className="flex justify-between items-start">
+                                          <p className="font-medium">{knowledgeEntry ? knowledgeEntry.knowledge : `Knowledge ID ${id}`}</p>
+                                          <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">ID: {id}</span>
+                                        </div>
+                                        {knowledgeEntry ? (
+                                          <>
+                                            <p className="text-sm text-gray-600 mt-1">{knowledgeEntry.description}</p>
+                                            <p className="text-sm font-mono mt-1">{knowledgeEntry.definition}</p>
+                                            <div className="mt-1 text-xs text-gray-500">
+                                              <span className="mr-2">Type: {knowledgeEntry.type}</span>
+                                              <span>Children Knowledge: {formatChildrenKnowledge(knowledgeEntry.children_knowledge)}</span>
+                                            </div>
+                                          </>
+                                        ) : (
+                                          <p className="text-gray-500">Knowledge ID {id} not found</p>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+
+                            {selectedEntry.test_cases && selectedEntry.test_cases.length > 0 && (
+                              renderTestCases(selectedEntry.test_cases)
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    
-                    <div className="p-4 border rounded-lg bg-white">
-                      <h4 className="font-medium mb-2">Conditions</h4>
-                      <p><span className="font-medium">Decimal:</span> {selectedEntry.conditions.decimal}</p>
-                      <p><span className="font-medium">Distinct:</span> {selectedEntry.conditions.distinct ? 'Yes' : 'No'}</p>
+
+                    {/* Ambiguity Information */}
+                    <div className="flex-shrink-0" style={{ width: '550px' }}>
+                      <div className="space-y-4">
+                        {renderCollapsibleSection(
+                          'ambiguity',
+                          'Ambiguity Information',
+                          <div className="space-y-4">
+                            <div className="p-3 border rounded bg-gray-50">
+                              <h5 className="font-medium mb-2">Ambiguous User Query</h5>
+                              <p className="text-gray-700">{selectedEntry.amb_user_query}</p>
+                            </div>
+
+                            {selectedEntry.user_query_ambiguity && (
+                              <div className="p-3 border rounded bg-gray-50">
+                                <h5 className="font-medium mb-2">User Query Ambiguity</h5>
+                                
+                                {selectedEntry.user_query_ambiguity.critical_ambiguity.length > 0 && (
+                                  <div className="mb-4">
+                                    <h6 className="font-medium text-red-600">Critical Ambiguity</h6>
+                                    <div className="space-y-2 mt-2">
+                                      {selectedEntry.user_query_ambiguity.critical_ambiguity.map((item, index) => (
+                                        <div key={index} className="p-2 border rounded bg-white">
+                                          <p><span className="font-medium">Term:</span> {item.term}</p>
+                                          <div className="mt-1">
+                                            <p className="font-medium text-sm">SQL Snippet:</p>
+                                            {renderSqlSnippet(item.sql_snippet)}
+                                          </div>
+                                          <p className="mt-1"><span className="font-medium">Type:</span> {item.type}</p>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                                
+                                {selectedEntry.user_query_ambiguity.non_critical_ambiguity.length > 0 && (
+                                  <div>
+                                    <h6 className="font-medium text-yellow-600">Non-Critical Ambiguity</h6>
+                                    <div className="space-y-2 mt-2">
+                                      {selectedEntry.user_query_ambiguity.non_critical_ambiguity.map((item, index) => (
+                                        <div key={index} className="p-2 border rounded bg-white">
+                                          <p><span className="font-medium">Term:</span> {item.term}</p>
+                                          <div className="mt-1">
+                                            <p className="font-medium text-sm">SQL Snippet:</p>
+                                            {renderSqlSnippet(item.sql_snippet)}
+                                          </div>
+                                          <p className="mt-1"><span className="font-medium">Type:</span> {item.type}</p>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+                            {selectedEntry.knowledge_ambiguity.length > 0 && (
+                              <div className="p-3 border rounded bg-gray-50">
+                                <h5 className="font-medium mb-2">Knowledge Ambiguity</h5>
+                                <div className="space-y-2">
+                                  {selectedEntry.knowledge_ambiguity.map((item, index) => (
+                                    <div key={index} className="p-2 border rounded bg-white">
+                                      <p><span className="font-medium">Term:</span> {item.term}</p>
+                                      <div className="mt-1">
+                                        <p className="font-medium text-sm">SQL Snippet:</p>
+                                        {renderSqlSnippet(item.sql_snippet)}
+                                      </div>
+                                      <p className="mt-1"><span className="font-medium">Type:</span> {item.type}</p>
+                                      <p><span className="font-medium">Deleted Knowledge:</span> {item.deleted_knowledge}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Follow-up Information */}
+                    <div className="flex-shrink-0" style={{ width: '550px' }}>
+                      <div className="space-y-4">
+                        {selectedEntry.follow_up && (
+                          renderCollapsibleSection(
+                            'followUp',
+                            'Follow-up Information',
+                            <div className="space-y-4">
+                              <div className="p-3 border rounded bg-gray-50">
+                                <h5 className="font-medium mb-2">Follow-up Query</h5>
+                                <p className="text-gray-700">{selectedEntry.follow_up.query}</p>
+                              </div>
+                              
+                              <div className="p-3 border rounded bg-gray-50">
+                                <h5 className="font-medium mb-2">Follow-up Solution SQL</h5>
+                                <SqlViewerWithCopy sql={selectedEntry.follow_up.sol_sql} />
+                              </div>
+                              
+                              {selectedEntry.follow_up.external_knowledge.length > 0 && (
+                                <div className="p-3 border rounded bg-gray-50">
+                                  <h5 className="font-medium mb-2">Follow-up External Knowledge</h5>
+                                  <div className="space-y-2">
+                                    {selectedEntry.follow_up.external_knowledge.map((id) => {
+                                      const knowledgeEntry = getKnowledgeById(id);
+                                      return (
+                                        <div key={id} className="p-2 border rounded bg-white">
+                                          <div className="flex justify-between items-start">
+                                            <p className="font-medium">{knowledgeEntry ? knowledgeEntry.knowledge : `Knowledge ID ${id}`}</p>
+                                            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">ID: {id}</span>
+                                          </div>
+                                          {knowledgeEntry ? (
+                                            <>
+                                              <p className="text-sm text-gray-600 mt-1">{knowledgeEntry.description}</p>
+                                              <p className="text-sm font-mono mt-1">{knowledgeEntry.definition}</p>
+                                              <div className="mt-1 text-xs text-gray-500">
+                                                <span className="mr-2">Type: {knowledgeEntry.type}</span>
+                                                <span>Children Knowledge: {formatChildrenKnowledge(knowledgeEntry.children_knowledge)}</span>
+                                              </div>
+                                            </>
+                                          ) : (
+                                            <p className="text-gray-500">Knowledge ID {id} not found</p>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              )}
+
+                              {selectedEntry.follow_up.test_cases && selectedEntry.follow_up.test_cases.length > 0 && (
+                                renderTestCases(selectedEntry.follow_up.test_cases, "Follow-up Test Cases")
+                              )}
+                            </div>
+                          )
+                        )}
+                      </div>
                     </div>
                   </div>
-
-                  {/* Main Query Group - Query, Solution SQL, External Knowledge, and Test Cases */}
-                  {renderCollapsibleSection(
-                    'mainQuery',
-                    'Main Query Information',
-                    <div className="space-y-4">
-                      <div className="p-3 border rounded bg-gray-50">
-                        <h5 className="font-medium mb-2">Query</h5>
-                        <p className="text-gray-700">{selectedEntry.query}</p>
-                      </div>
-
-                      {selectedEntry.sol_sql.length > 0 && (
-                        <div className="p-3 border rounded bg-gray-50">
-                          <h5 className="font-medium mb-2">Solution SQL</h5>
-                          <SqlViewer sql={selectedEntry.sol_sql} />
-                        </div>
-                      )}
-
-                      {selectedEntry.preprocess_sql.length > 0 && (
-                        <div className="p-3 border rounded bg-gray-50">
-                          <h5 className="font-medium mb-2">Preprocess SQL</h5>
-                          <SqlViewer sql={selectedEntry.preprocess_sql} />
-                        </div>
-                      )}
-
-                      {selectedEntry.clean_up_sqls.length > 0 && (
-                        <div className="p-3 border rounded bg-gray-50">
-                          <h5 className="font-medium mb-2">Clean Up SQL</h5>
-                          <SqlViewer sql={selectedEntry.clean_up_sqls} />
-                        </div>
-                      )}
-
-                      {selectedEntry.external_knowledge.length > 0 && (
-                        <div className="p-3 border rounded bg-gray-50">
-                          <h5 className="font-medium mb-2">External Knowledge</h5>
-                          <div className="space-y-2">
-                            {selectedEntry.external_knowledge.map((id) => {
-                              const knowledgeEntry = getKnowledgeById(id);
-                              return (
-                                <div key={id} className="p-2 border rounded bg-white">
-                                  <div className="flex justify-between items-start">
-                                    <p className="font-medium">{knowledgeEntry ? knowledgeEntry.knowledge : `Knowledge ID ${id}`}</p>
-                                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">ID: {id}</span>
-                                  </div>
-                                  {knowledgeEntry ? (
-                                    <>
-                                      <p className="text-sm text-gray-600 mt-1">{knowledgeEntry.description}</p>
-                                      <p className="text-sm font-mono mt-1">{knowledgeEntry.definition}</p>
-                                      <div className="mt-1 text-xs text-gray-500">
-                                        <span className="mr-2">Type: {knowledgeEntry.type}</span>
-                                        <span>Children Knowledge: {formatChildrenKnowledge(knowledgeEntry.children_knowledge)}</span>
-                                      </div>
-                                    </>
-                                  ) : (
-                                    <p className="text-gray-500">Knowledge ID {id} not found</p>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Test Cases moved to Main Query Information */}
-                      {selectedEntry.test_cases && selectedEntry.test_cases.length > 0 && (
-                        renderTestCases(selectedEntry.test_cases)
-                      )}
-                    </div>
-                  )}
-
-                  {/* Ambiguity Group - Ambiguous User Query, User Query Ambiguity, and Knowledge Ambiguity */}
-                  {renderCollapsibleSection(
-                    'ambiguity',
-                    'Ambiguity Information',
-                    <div className="space-y-4">
-                      <div className="p-3 border rounded bg-gray-50">
-                        <h5 className="font-medium mb-2">Ambiguous User Query</h5>
-                        <p className="text-gray-700">{selectedEntry.amb_user_query}</p>
-                      </div>
-
-                      {selectedEntry.user_query_ambiguity && (
-                        <div className="p-3 border rounded bg-gray-50">
-                          <h5 className="font-medium mb-2">User Query Ambiguity</h5>
-                          
-                          {selectedEntry.user_query_ambiguity.critical_ambiguity.length > 0 && (
-                            <div className="mb-4">
-                              <h6 className="font-medium text-red-600">Critical Ambiguity</h6>
-                              <div className="space-y-2 mt-2">
-                                {selectedEntry.user_query_ambiguity.critical_ambiguity.map((item, index) => (
-                                  <div key={index} className="p-2 border rounded bg-white">
-                                    <p><span className="font-medium">Term:</span> {item.term}</p>
-                                    <div className="mt-1">
-                                      <p className="font-medium text-sm">SQL Snippet:</p>
-                                      {renderSqlSnippet(item.sql_snippet)}
-                                    </div>
-                                    <p className="mt-1"><span className="font-medium">Type:</span> {item.type}</p>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                          
-                          {selectedEntry.user_query_ambiguity.non_critical_ambiguity.length > 0 && (
-                            <div>
-                              <h6 className="font-medium text-yellow-600">Non-Critical Ambiguity</h6>
-                              <div className="space-y-2 mt-2">
-                                {selectedEntry.user_query_ambiguity.non_critical_ambiguity.map((item, index) => (
-                                  <div key={index} className="p-2 border rounded bg-white">
-                                    <p><span className="font-medium">Term:</span> {item.term}</p>
-                                    <div className="mt-1">
-                                      <p className="font-medium text-sm">SQL Snippet:</p>
-                                      {renderSqlSnippet(item.sql_snippet)}
-                                    </div>
-                                    <p className="mt-1"><span className="font-medium">Type:</span> {item.type}</p>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {selectedEntry.knowledge_ambiguity.length > 0 && (
-                        <div className="p-3 border rounded bg-gray-50">
-                          <h5 className="font-medium mb-2">Knowledge Ambiguity</h5>
-                          <div className="space-y-2">
-                            {selectedEntry.knowledge_ambiguity.map((item, index) => (
-                              <div key={index} className="p-2 border rounded bg-white">
-                                <p><span className="font-medium">Term:</span> {item.term}</p>
-                                <div className="mt-1">
-                                  <p className="font-medium text-sm">SQL Snippet:</p>
-                                  {renderSqlSnippet(item.sql_snippet)}
-                                </div>
-                                <p className="mt-1"><span className="font-medium">Type:</span> {item.type}</p>
-                                <p><span className="font-medium">Deleted Knowledge:</span> {item.deleted_knowledge}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Follow-up Group */}
-                  {selectedEntry.follow_up && (
-                    renderCollapsibleSection(
-                      'followUp',
-                      'Follow-up Information',
-                      <div className="space-y-4">
-                        <div className="p-3 border rounded bg-gray-50">
-                          <h5 className="font-medium mb-2">Follow-up Query</h5>
-                          <p className="text-gray-700">{selectedEntry.follow_up.query}</p>
-                        </div>
-                        
-                        <div className="p-3 border rounded bg-gray-50">
-                          <h5 className="font-medium mb-2">Follow-up Solution SQL</h5>
-                          <SqlViewer sql={selectedEntry.follow_up.sol_sql} />
-                        </div>
-                        
-                        {selectedEntry.follow_up.external_knowledge.length > 0 && (
-                          <div className="p-3 border rounded bg-gray-50">
-                            <h5 className="font-medium mb-2">Follow-up External Knowledge</h5>
-                            <div className="space-y-2">
-                              {selectedEntry.follow_up.external_knowledge.map((id) => {
-                                const knowledgeEntry = getKnowledgeById(id);
-                                return (
-                                  <div key={id} className="p-2 border rounded bg-white">
-                                    <div className="flex justify-between items-start">
-                                      <p className="font-medium">{knowledgeEntry ? knowledgeEntry.knowledge : `Knowledge ID ${id}`}</p>
-                                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">ID: {id}</span>
-                                    </div>
-                                    {knowledgeEntry ? (
-                                      <>
-                                        <p className="text-sm text-gray-600 mt-1">{knowledgeEntry.description}</p>
-                                        <p className="text-sm font-mono mt-1">{knowledgeEntry.definition}</p>
-                                        <div className="mt-1 text-xs text-gray-500">
-                                          <span className="mr-2">Type: {knowledgeEntry.type}</span>
-                                          <span>Children Knowledge: {formatChildrenKnowledge(knowledgeEntry.children_knowledge)}</span>
-                                        </div>
-                                      </>
-                                    ) : (
-                                      <p className="text-gray-500">Knowledge ID {id} not found</p>
-                                    )}
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Follow-up Test Cases */}
-                        {selectedEntry.follow_up.test_cases && selectedEntry.follow_up.test_cases.length > 0 && (
-                          renderTestCases(selectedEntry.follow_up.test_cases, "Follow-up Test Cases")
-                        )}
-                      </div>
-                    )
-                  )}
                 </div>
               </div>
             )}
