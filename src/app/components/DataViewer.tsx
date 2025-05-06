@@ -397,6 +397,13 @@ export default function DataViewer() {
                             <div className="p-3 border rounded bg-gray-50">
                               <h5 className="font-medium mb-2">Ambiguous User Query</h5>
                               <p className="text-gray-700">{selectedEntry.amb_user_query}</p>
+                              {selectedEntry.difficulty_tier && (
+                                <div className="mt-2">
+                                  <span className="inline-block px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded">
+                                    Difficulty Tier: {selectedEntry.difficulty_tier}
+                                  </span>
+                                </div>
+                              )}
                             </div>
 
                             {selectedEntry.user_query_ambiguity && (
@@ -478,6 +485,13 @@ export default function DataViewer() {
                               <div className="p-3 border rounded bg-gray-50">
                                 <h5 className="font-medium mb-2">Follow-up Query</h5>
                                 <p className="text-gray-700">{selectedEntry.follow_up.query}</p>
+                                {selectedEntry.follow_up.difficulty_tier && (
+                                  <div className="mt-2">
+                                    <span className="inline-block px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded">
+                                      Follow-up Difficulty Tier: {selectedEntry.follow_up.difficulty_tier}
+                                    </span>
+                                  </div>
+                                )}
                               </div>
                               
                               <div className="p-3 border rounded bg-gray-50">
