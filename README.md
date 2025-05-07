@@ -1,6 +1,27 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Prerequisites
+Replace the data 'bird-interact' folder with the newest data.
+
+## Getting Started If Using Docker 
+
+### Build the image with the development target
+```bash 
+docker build --target development -t bird_interact_viewer .
+```
+
+### Run the container with port forwarding and volume mounting for hot reloading
+```bash
+docker run -p 3001:3000 -v $(pwd):/app bird_interact_viewer
+```
+
+### Open the browser and navigate to the app
+```bash
+http://localhost:3001
+```
+
+
+## Getting Started (No need to do if using Docker)
 
 First, run the development server:
 
